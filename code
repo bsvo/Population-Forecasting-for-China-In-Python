@@ -1,0 +1,65 @@
+import matplotlib.pyplot as plt
+import numpy as np
+#YEARS
+xyears=[1960.00,1961.00,1962.00,1963.00,1964.00,1965.00,1966.00,1967.00,1968.00,1969.00,1970.00,1971.00,1972.00,1973.00,1974.00,1975.00,1976.00,1977.00,1978.00,1979.00,1980.00,1981.00,1982.00,1983.00,1984.00,1985.00,1986.00,1987.00,1988.00,1989.00,1990.00,1991.00,1992.00,1993.00,1994.00,1995.00,1996.00,1997.00,1998.00,1999.00,2000.00,2001.00,2002.00,2003.00,2004.00,2005.00,2006.00,2007.00,2008.00,2009.00,2010.00,2011.00,2012.00,2013.00,2014.00,2015.00,2016.00,2017.00]
+xyearsc=[1960.00,1961.00,1962.00,1963.00,1964.00,1965.00,1966.00,1967.00,1968.00,1969.00,1970.00,1971.00,1972.00,1973.00,1974.00,1975.00,1976.00,1977.00,1978.00,1979.00,1980.00,1981.00,1982.00,1983.00,1984.00,1985.00,1986.00,1987.00,1988.00,1989.00,1990.00,1991.00,1992.00,1993.00,1994.00,1995.00,1996.00,1997.00,1998.00,1999.00,2000.00,2001.00,2002.00,2003.00,2004.00,2005.00,2006.00,2007.00,2008.00,2009.00,2010.00,2011.00,2012.00,2013.00,2014.00,2015.00,2016.00]
+xyearscc=[1960.00,1961.00,1962.00,1963.00,1964.00,1965.00,1966.00,1967.00,1968.00,1969.00,1970.00,1971.00,1972.00,1973.00,1974.00,1975.00,1976.00,1977.00,1978.00,1979.00,1980.00,1981.00,1982.00,1983.00,1984.00,1985.00,1986.00,1987.00,1988.00,1989.00,1990.00,1991.00,1992.00,1993.00,1994.00,1995.00,1996.00,1997.00,1998.00,1999.00,2000.00,2001.00,2002.00,2003.00,2004.00,2005.00,2006.00,2007.00,2008.00,2009.00,2010.00,2011.00,2012.00,2013.00,2014.00,2015.00]
+#CHINA
+ychinapop=[667070000.00,660330000.00,665770000.00,682335000.00,698355000.00,715185000.00,735400000.00,754550000.00,774510000.00,796025000.00,818315000.00,841105000.00,862030000.00,881940000.00,900350000.00,916395000.00,930685000.00,943455000.00,956165000.00,969005000.00,981235000.00,993885000.00,1008630000.00,1023310000.00,1036825000.00,1051040000.00,1066790000.00,1084035000.00,1101630000.00,1118650000.00,1135185000.00,1150780000.00,1164970000.00,1178440000.00,1191835000.00,1204855000.00,1217550000.00,1230075000.00,1241935000.00,1252735000.00,1262645000.00,1271850000.00,1280400000.00,1288400000.00,1296075000.00,1303720000.00,1311020000.00,1317885000.00,1324655000.00,1331260000.00,1337705000.00,1344130000.00,1350695000.00,1357380000.00,1364270000.00,1371220000.00,1378665000.00,1386395000.00]
+ychinacpop=[]
+for x in range(len(xyears)-1):
+    ychinacpop.append(ychinapop[x+1]-ychinapop[x])
+ychinaccpop=[]
+for x in range(len(xyearsc)-1):
+    ychinaccpop.append(ychinacpop[x+1]-ychinacpop[x])
+
+plt.title('Chinas population over time')
+plt.xlabel('Year')
+plt.ylabel('Population (billions)')
+plt.scatter(xyears,ychinapop,s=10)
+#takes user input
+futureyear = input("What year do you want to predict Chinas population for ") 
+futureyear=float(futureyear)
+
+#linear regression
+i,o = np.polyfit(xyears,ychinapop,1)
+#print(i,o)
+def linregress(futureyear):
+    return ((i*futureyear)+o)
+
+
+linguess=[]
+for x in xyears:
+    linguess.append(linregress(x))
+
+plt.plot(xyears,linguess,linewidth=3)
+
+#polynomial regression
+z = np.polyfit(xyears,ychinapop,2)
+pol1,pol2,pol3 = np.poly1d(z)
+#print(pol1,pol2,pol3)
+
+def polregress(futureyear):
+    return ((pol1*futureyear*futureyear)+(pol2*futureyear)+pol3)
+
+polguess=[]
+for x in xyears:
+    polguess.append(polregress(x))
+
+print("The linear regression estimate for "+str(futureyear)+ " is "+str(linregress(futureyear)))
+print("The polynomial regression estimate for "+str(futureyear)+ " is "+str(polregress(futureyear)))
+
+plt.plot(xyears,polguess,linewidth=3)
+plt.show();
+
+
+plt.title('Chinas change in population over time')
+plt.xlabel('Year')
+plt.ylabel('Change in Population (tens of millions)')
+plt.scatter(xyearsc,ychinacpop,s=10)
+plt.show();
+plt.title('Chinas change in the rate of population over time')
+plt.xlabel('Year')
+plt.ylabel('Change in the rate of Population (millions)')
+plt.scatter(xyearscc,ychinaccpop,s=10)
+plt.show();
